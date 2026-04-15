@@ -1,0 +1,95 @@
+import 'package:flutter/material.dart';
+
+class TaskFlow extends StatelessWidget {
+  const TaskFlow({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+        title: Text(
+          "TaskFlow",
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.teal,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.all(5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.check_circle_outline, size: 24),
+                  Text("Take dog out for walk", style: TextStyle(fontSize: 20)),
+                  Text("4/16", style: TextStyle(fontSize: 20)),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.check_circle_outline, size: 24),
+                  Text("Do gym workout", style: TextStyle(fontSize: 20)),
+                  Text("4/18", style: TextStyle(fontSize: 20)),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.check_circle_outline, size: 24),
+                  Text("Set up grocery List", style: TextStyle(fontSize: 20)),
+                  Text("4/20", style: TextStyle(fontSize: 20)),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// --- Empty State Screen aka "No tasks yet" -------------------------
+// class TaskFlow extends StatelessWidget {
+//   const TaskFlow({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(
+//           "TaskFlow",
+//           style: TextStyle(color: Colors.white),
+//         ),
+//         backgroundColor: Colors.teal,
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: [
+//             Icon(Icons.check_circle_outline, size: 60),
+//             Text(
+//               "No tasks yet",
+//               style: TextStyle(fontSize: 30),
+//             ),
+//             Text(
+//               "Tap + to add your first task",
+//               style: TextStyle(fontSize: 18),
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
