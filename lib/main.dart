@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'pages/home_page.dart';
 
 final colorScheme = ColorScheme.fromSeed(
   seedColor: Color(0xFF00BCD4),
@@ -17,7 +18,10 @@ final theme = ThemeData(
 
 void main() {
   runApp(
-    MyApp(),
+    MaterialApp(
+      theme: theme,
+      home: TaskFlow(),
+    ),
   );
 }
 
