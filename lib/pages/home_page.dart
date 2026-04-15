@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/task_card.dart';
 
 class TaskFlow extends StatelessWidget {
   const TaskFlow({super.key});
@@ -17,61 +18,21 @@ class TaskFlow extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.check_circle_outline, size: 24),
-                  Text(
-                    "Take dog out for walk",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  Text(
-                    "4/16",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
+          children: const [
+            TaskCard(
+              title: "Take dog out for walk",
+              date: "4/16",
+              priority: "low",
             ),
-            Padding(
-              padding: EdgeInsets.all(5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.check_circle_outline, size: 24),
-                  Text(
-                    "Do gym workout",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  Text(
-                    "4/18",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
+            TaskCard(
+              title: "Do gym workout",
+              date: "4/18",
+              priority: "medium",
             ),
-            Padding(
-              padding: EdgeInsets.all(5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.check_circle_outline, size: 24),
-                  Text(
-                    "Set up grocery List",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  Text(
-                    "4/20",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
+            TaskCard(
+              title: "Set up grocery List",
+              date: "4/20",
+              priority: "high",
             ),
           ],
         ),
