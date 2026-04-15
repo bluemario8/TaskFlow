@@ -26,8 +26,14 @@ class TaskFlow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(Icons.check_circle_outline, size: 24),
-                  Text("Take dog out for walk", style: TextStyle(fontSize: 20)),
-                  Text("4/16", style: TextStyle(fontSize: 20)),
+                  Text(
+                    "Take dog out for walk",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  Text(
+                    "4/16",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                 ],
               ),
             ),
@@ -38,8 +44,14 @@ class TaskFlow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(Icons.check_circle_outline, size: 24),
-                  Text("Do gym workout", style: TextStyle(fontSize: 20)),
-                  Text("4/18", style: TextStyle(fontSize: 20)),
+                  Text(
+                    "Do gym workout",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  Text(
+                    "4/18",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                 ],
               ),
             ),
@@ -50,8 +62,14 @@ class TaskFlow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(Icons.check_circle_outline, size: 24),
-                  Text("Set up grocery List", style: TextStyle(fontSize: 20)),
-                  Text("4/20", style: TextStyle(fontSize: 20)),
+                  Text(
+                    "Set up grocery List",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  Text(
+                    "4/20",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
                 ],
               ),
             ),
