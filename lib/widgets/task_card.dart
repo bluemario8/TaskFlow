@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:taskflow/models/task.dart';
 
 class TaskCard extends StatelessWidget {
   final String title;
   final String date;
-  final String priority;
+  final TaskPriority priority;
 
   const TaskCard({
     super.key,
@@ -14,11 +15,11 @@ class TaskCard extends StatelessWidget {
 
   Color getPriorityColor() {
     switch (priority) {
-      case 'high':
+      case TaskPriority.high:
         return Colors.red;
-      case 'medium':
+      case TaskPriority.medium:
         return Colors.amber;
-      default:
+      default: // low
         return Colors.green;
     }
   }
