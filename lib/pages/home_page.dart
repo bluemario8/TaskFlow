@@ -9,9 +9,11 @@ class TaskFlow extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           "TaskFlow",
-          style: TextStyle(color: Colors.white),
+          style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
         ),
-        backgroundColor: Colors.teal,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Center(
         child: Column(
