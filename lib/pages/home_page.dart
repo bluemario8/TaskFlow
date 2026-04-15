@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/task_card.dart';
+import '../models/task.dart';
 
 class TaskFlow extends StatelessWidget {
   const TaskFlow({super.key});
@@ -16,26 +17,22 @@ class TaskFlow extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: Center(
-        child: Column(
-          children: const [
-            TaskCard(
-              title: "Take dog out for walk",
-              date: "4/16",
-              priority: "low",
-            ),
-            TaskCard(
-              title: "Do gym workout",
-              date: "4/18",
-              priority: "medium",
-            ),
-            TaskCard(
-              title: "Set up grocery List",
-              date: "4/20",
-              priority: "high",
-            ),
-          ],
-        ),
+      body: ListView.separated(
+        itemCount: dummyTasks.length,
+        separatorBuilder: (context, index) {
+          return Divider(
+            height: 1,
+            color: Colors.black26,
+          );
+        },
+        itemBuilder: (context, index) {
+          final task = dummyTasks[index];
+          return TaskCard(
+            title: task.title,
+            date: '${task.dueDate.month}/${task.dueDate.day}',
+            priority: task.priority.name,
+          );
+        },
       ),
     );
   }
