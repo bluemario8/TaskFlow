@@ -10,6 +10,7 @@ class TaskFlow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> categories = ['All', 'Personal', 'Work', 'Health', 'School'];
     return Scaffold(
       appBar: AppBar(
         title: Text(
