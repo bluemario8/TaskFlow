@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:taskflow/models/task.dart';
 
 class TaskCard extends StatelessWidget {
   final String title;
   final String date;
-  final String priority;
+  final TaskPriority priority;
   final bool isCompleted;
 
   const TaskCard({
@@ -16,11 +17,11 @@ class TaskCard extends StatelessWidget {
 
   Color getPriorityColor() {
     switch (priority) {
-      case 'high':
+      case TaskPriority.high:
         return Colors.red;
-      case 'medium':
+      case TaskPriority.medium:
         return Colors.amber;
-      default:
+      default: // low
         return Colors.green;
     }
   }
@@ -51,9 +52,26 @@ class TaskCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
-            SizedBox(width: 12),
-            Icon(Icons.check_circle_outline, size: 24),
-            SizedBox(width: 12),
+            SizedBox(
+              width: 45,
+              child: Stack(
+                children: [
+                  Builder(
+                    builder: (context) {
+                      if (isCompleted) {
+                        return Positioned(
+                          left: 10,
+                          top: 2,
+                          child: Icon(Icons.check_circle_outline, size: 24)
+                        );
+                      }
+
+                      return Container();
+                    },
+                  ),
+                ],
+              ),
+            ),
             Expanded(
               child: Text(
                 title,

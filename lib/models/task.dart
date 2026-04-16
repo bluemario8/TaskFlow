@@ -1,88 +1,55 @@
 import 'package:flutter/material.dart';
+import 'package:id_gen/id_gen_helpers.dart';
 
-enum Priority { high, medium, low }
-
-class Task {
-  final int id;
-  final String title;
-  final String category;
-  final DateTime dueDate;
-  final Priority priority;
-  final bool isCompleted;
-
-  Task({
-    required this.id,
-    required this.title,
-    required this.category,
-    required this.dueDate,
-    required this.priority,
-    required this.isCompleted,
-  });
+enum TaskPriority {
+  high,
+  medium,
+  low,
 }
 
-List<Task> dummyTasks = [
-  Task(
-    id: 1,
-    title: 'Take dog out for walk',
-    category: 'Personal',
-    dueDate: DateTime(2026, 4, 16),
-    priority: Priority.medium,
-    isCompleted: false,
-  ),
-  Task(
-    id: 2,
-    title: 'Do gym workout',
-    category: 'Health',
-    dueDate: DateTime(2026, 4, 18),
-    priority: Priority.high,
-    isCompleted: true,
-  ),
-  Task(
-    id: 3,
-    title: 'Set up grocery list',
-    category: 'Personal',
-    dueDate: DateTime(2026, 4, 20),
-    priority: Priority.low,
-    isCompleted: true,
-  ),
-  Task(
-    id: 4,
-    title: 'Schedule doctor appointment',
-    category: 'Health',
-    dueDate: DateTime(2026, 4, 20),
-    priority: Priority.medium,
-    isCompleted: false,
-  ),
-  Task(
-    id: 5,
-    title: 'Print papers',
-    category: 'Work',
-    dueDate: DateTime(2026, 4, 17),
-    priority: Priority.low,
-    isCompleted: true,
-  ),
-  Task(
-    id: 6,
-    title: 'Call client',
-    category: 'Work',
-    dueDate: DateTime(2026, 4, 18),
-    priority: Priority.high,
-    isCompleted: false,
-  ),
-  Task(
-    id: 7,
-    title: 'Write in journal',
-    category: 'Personal',
-    dueDate: DateTime(2026, 4, 16),
-    priority: Priority.low,
-    isCompleted: false,
-  ),
-  Task(
-    id: 8,
-    title: 'Practice presentation',
-    category: 'Work',
-    dueDate: DateTime(2026, 4, 20),
-    priority: Priority.high,
-    isCompleted: false,
-  ),
+class Task {
+  int id = genTransitId;
+  String title;
+  String category;
+  DateTime dueDate;
+  TaskPriority priority;
+  bool isCompleted;
+
+  Task(this.title, this.category, this.dueDate, this.priority, this.isCompleted);
+}
+
+List<Task> dummyTask = [
+  Task("Take dog out for a walk", "Dog",
+       DateTime.now(), TaskPriority.low, true),
+  Task("Do gym workout", "Workout",
+      DateTime.now(), TaskPriority.medium, false),
+  Task("Set up grocery list", "Grocery",
+      DateTime.now(), TaskPriority.high, true),
+  Task("Take dog out for a walk", "Dog",
+      DateTime.now(), TaskPriority.low, false),
+  Task("Do gym workout", "Workout",
+      DateTime.now(), TaskPriority.medium, true),
+  Task("Set up grocery list", "Grocery",
+      DateTime.now(), TaskPriority.high, false),
+  Task("Take dog out for a walk", "Dog",
+      DateTime.now(), TaskPriority.low, false),
+  Task("Do gym workout", "Workout",
+      DateTime.now(), TaskPriority.medium, true),
+  Task("Set up grocery list", "Grocery",
+      DateTime.now(), TaskPriority.high, true),
+  Task("Take dog out for a walk", "Dog",
+      DateTime.now(), TaskPriority.low, false),
+  Task("Do gym workout", "Workout",
+      DateTime.now(), TaskPriority.medium, false),
+  Task("Set up grocery list", "Grocery",
+      DateTime.now(), TaskPriority.high, false),
+];
+
+// Maybe consider creating a set and a list
+// Use the set to check if the header exists or not
+// if not, add it to both
+List<String> dummyTaskHeader = [
+  "Dog",
+  "Workout",
+  "Grocery",
 ];

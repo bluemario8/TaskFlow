@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:intl/intl.dart';
 import '../widgets/task_card.dart';
-import '../models/task.dart';
+import '../widgets/task_header_card.dart';
+import 'package:taskflow/models/task.dart';
 
 class TaskFlow extends StatelessWidget {
   const TaskFlow({super.key});
@@ -19,46 +22,55 @@ class TaskFlow extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // horizontal category labels
           Container(
-            height: 60,
-            padding: EdgeInsets.symmetric(vertical: 16),
-            child: ListView.builder(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              "Categories",
+              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ),
+          Container(
+            height: 75,
+            margin: EdgeInsets.symmetric(vertical: 4.0),
+            child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: categories.length,
+              itemCount: dummyTaskHeader.length,
               itemBuilder: (context, index) {
-                final category = categories[index];
-                return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 8),
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  alignment: Alignment.center,
-                  child: Text(category, style: TextStyle(color: Colors.white)),
+                return TaskHeaderCard(
+                  title: dummyTaskHeader[index],
+                );
+              },
+              separatorBuilder: (context, index) {
+                return Divider(
+                  color: Colors.transparent,
                 );
               },
             ),
           ),
-          Expanded(
-            child: ListView.separated(
-              itemCount: dummyTasks.length,
-              separatorBuilder: (context, index) {
-                return Divider(
-                  height: 1,
-                  color: Colors.black26,
-                );
-              },
-              itemBuilder: (context, index) {
-                final task = dummyTasks[index];
-                return TaskCard(
-                  title: task.title,
-                  date: '${task.dueDate.month}/${task.dueDate.day}',
-                  priority: task.priority.name,
-                  isCompleted: task.isCompleted,
-                );
-              },
+          Flexible(
+            child: Center(
+              child: ListView.separated(
+                itemCount: dummyTask.length,
+                itemBuilder: (context, index) {
+                  return TaskCard(
+                    title: dummyTask[index].title,
+                    date: DateFormat('MMM dd').format(dummyTask[index].dueDate),
+                    priority: dummyTask[index].priority,
+                    isCompleted: dummyTask[index].isCompleted,
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return Divider(
+                    color: Colors.transparent,
+                    height: 4,
+                  );
+                },
+              ),
             ),
           ),
         ],
