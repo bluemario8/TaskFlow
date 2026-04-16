@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../widgets/task_card.dart';
 import '../widgets/task_header_card.dart';
 import 'package:taskflow/models/task.dart';
+import 'add_task_page.dart';
 
 class TaskFlow extends StatefulWidget {
   const TaskFlow({super.key});
@@ -26,7 +27,34 @@ class _TaskFlowState extends State<TaskFlow> {
             color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
+        iconTheme: IconThemeData(color: Colors.white), // Color for hamburger menu button
         backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddTaskPage(),
+            ),
+          );
+        },
+        child: Icon(Icons.add, color: Colors.white),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              child: Text("TaskFlow"),
+            ),
+            ListTile(
+              title: Text("Sign Out"),
+              onTap: () {},
+            ),
+          ],
+        ),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
