@@ -4,12 +4,14 @@ class TaskCard extends StatelessWidget {
   final String title;
   final String date;
   final String priority;
+  final bool isCompleted;
 
   const TaskCard({
     super.key,
     required this.title,
     required this.date,
     required this.priority,
+    required this.isCompleted,
   });
 
   Color getPriorityColor() {

@@ -56,6 +56,7 @@ class TaskFlow extends StatelessWidget {
                   title: task.title,
                   date: '${task.dueDate.month}/${task.dueDate.day}',
                   priority: task.priority.name,
+                  isCompleted: task.isCompleted,
                 );
               },
             ),
