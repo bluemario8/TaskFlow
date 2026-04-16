@@ -5,8 +5,15 @@ import '../widgets/task_card.dart';
 import '../widgets/task_header_card.dart';
 import 'package:taskflow/models/task.dart';
 
-class TaskFlow extends StatelessWidget {
+class TaskFlow extends StatefulWidget {
   const TaskFlow({super.key});
+
+  @override
+  State<TaskFlow> createState() => _TaskFlowState();
+}
+
+class _TaskFlowState extends State<TaskFlow> {
+  int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -72,6 +79,28 @@ class TaskFlow extends StatelessWidget {
                 },
               ),
             ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.task),
+            label: 'Tasks',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bookmark),
+            label: 'Categories',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
       ),
