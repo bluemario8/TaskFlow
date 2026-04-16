@@ -7,6 +7,7 @@ class TaskFlow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> categories = ['All', 'Personal', 'Work', 'Health', 'School'];
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -17,22 +18,49 @@ class TaskFlow extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: ListView.separated(
-        itemCount: dummyTasks.length,
-        separatorBuilder: (context, index) {
-          return Divider(
-            height: 1,
-            color: Colors.black26,
-          );
-        },
-        itemBuilder: (context, index) {
-          final task = dummyTasks[index];
-          return TaskCard(
-            title: task.title,
-            date: '${task.dueDate.month}/${task.dueDate.day}',
-            priority: task.priority.name,
-          );
-        },
+      body: Column(
+        children: [
+          Container(
+            height: 60,
+            padding: EdgeInsets.symmetric(vertical: 16),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: categories.length,
+              itemBuilder: (context, index) {
+                final category = categories[index];
+                return Container(
+                  margin: EdgeInsets.symmetric(horizontal: 8),
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.primary,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(category, style: TextStyle(color: Colors.white)),
+                );
+              },
+            ),
+          ),
+          Expanded(
+            child: ListView.separated(
+              itemCount: dummyTasks.length,
+              separatorBuilder: (context, index) {
+                return Divider(
+                  height: 1,
+                  color: Colors.black26,
+                );
+              },
+              itemBuilder: (context, index) {
+                final task = dummyTasks[index];
+                return TaskCard(
+                  title: task.title,
+                  date: '${task.dueDate.month}/${task.dueDate.day}',
+                  priority: task.priority.name,
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
