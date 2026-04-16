@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import '../widgets/task_card.dart';
+import '../widgets/task_header_card.dart';
 import 'package:taskflow/models/task.dart';
 
 class TaskFlow extends StatelessWidget {
@@ -18,23 +20,59 @@ class TaskFlow extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: Center(
-        child: ListView.separated(
-          itemCount: dummyTask.length,
-          itemBuilder: (context, index) {
-            return TaskCard(
-              title: dummyTask[index].title,
-              date: DateFormat('MMM dd').format(dummyTask[index].dueDate),
-              priority: dummyTask[index].priority,
-            );
-          },
-          separatorBuilder: (context, index) {
-            return Divider(
-              color: Colors.transparent,
-              height: 4,
-            );
-          },
-        ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // horizontal category labels
+          Container(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              "Categories",
+              style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ),
+          Container(
+            height: 75,
+            margin: EdgeInsets.symmetric(vertical: 4.0),
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: dummyTaskHeader.length,
+              itemBuilder: (context, index) {
+                return TaskHeaderCard(
+                  title: dummyTaskHeader[index],
+                );
+              },
+              separatorBuilder: (context, index) {
+                return Divider(
+                  color: Colors.transparent,
+                );
+              },
+            ),
+          ),
+          Flexible(
+            child: Center(
+              child: ListView.separated(
+                itemCount: dummyTask.length,
+                itemBuilder: (context, index) {
+                  return TaskCard(
+                    title: dummyTask[index].title,
+                    date: DateFormat('MMM dd').format(dummyTask[index].dueDate),
+                    priority: dummyTask[index].priority,
+                    isCompleted: dummyTask[index].isCompleted,
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return Divider(
+                    color: Colors.transparent,
+                    height: 4,
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
