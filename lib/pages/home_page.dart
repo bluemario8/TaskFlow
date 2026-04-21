@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:taskflow/pages/task_detail_page.dart';
 import '../widgets/task_card.dart';
 import '../widgets/task_header_card.dart';
 import 'package:taskflow/models/task.dart';
@@ -92,11 +93,44 @@ class _TaskFlowState extends State<TaskFlow> {
               child: ListView.separated(
                 itemCount: dummyTask.length,
                 itemBuilder: (context, index) {
-                  return TaskCard(
-                    title: dummyTask[index].title,
-                    date: DateFormat('MMM dd').format(dummyTask[index].dueDate),
-                    priority: dummyTask[index].priority,
-                    isCompleted: dummyTask[index].isCompleted,
+                  final task = dummyTask[index];
+
+                  return Dismissible(
+                    key: Key(task.title + index.toString()), // must be unique
+
+                    direction: DismissDirection.endToStart, // swipe right → left
+
+                    onDismissed: (direction) {
+                      setState(() {
+                        dummyTask.removeAt(index);
+                      });
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("${task.title} deleted")),
+                      );
+                    },
+
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TaskDetailPage(task: task, onToggleStatus: (Task p1) {  },),
+                          ),
+                        );
+                      },
+                      child: TaskCard(
+                        title: task.title,
+                        date: DateFormat('MMM dd').format(task.dueDate),
+                        priority: task.priority,
+                        isCompleted: task.isCompleted,
+                        onToggleComplete: () {
+                          setState(() {
+                            task.isCompleted = !task.isCompleted;
+                          });
+                        },
+                      ),
+                    ),
                   );
                 },
                 separatorBuilder: (context, index) {
