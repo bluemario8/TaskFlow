@@ -6,6 +6,7 @@ class TaskCard extends StatelessWidget {
   final String date;
   final TaskPriority priority;
   final bool isCompleted;
+  final VoidCallback onToggleComplete;
 
   const TaskCard({
     super.key,
@@ -13,6 +14,7 @@ class TaskCard extends StatelessWidget {
     required this.date,
     required this.priority,
     required this.isCompleted,
+    required this.onToggleComplete,
   });
 
   Color getPriorityColor() {
@@ -42,6 +44,7 @@ class TaskCard extends StatelessWidget {
           ),
         ],
       ),
+
       child: IntrinsicHeight(
         child: Row(
           children: [
@@ -54,22 +57,17 @@ class TaskCard extends StatelessWidget {
             ),
             SizedBox(
               width: 45,
-              child: Stack(
-                children: [
-                  Builder(
-                    builder: (context) {
-                      if (isCompleted) {
-                        return Positioned(
-                          left: 10,
-                          top: 2,
-                          child: Icon(Icons.check_circle_outline, size: 24)
-                        );
-                      }
-
-                      return Container();
-                    },
+              child: Center(
+                child: IconButton(
+                  onPressed: onToggleComplete,
+                  icon: Icon(
+                    isCompleted
+                        ? Icons.check_circle
+                        : Icons.radio_button_unchecked,
+                    size: 24,
+                    color: isCompleted ? Colors.green : Colors.grey,
                   ),
-                ],
+                ),
               ),
             ),
             Expanded(
