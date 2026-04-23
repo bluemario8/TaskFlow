@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "317243693071",
+    "project_id": "taskflow-6790c",
+    "storage_bucket": "taskflow-6790c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317243693071:android:b6243a15c2dd8e298f2b7a",
+        "android_client_info": {
+          "package_name": "com.example.taskflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkrIh4sF1lJ6svdWiWV4JoMr1KxBa16II"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317243693071:android:52a46e90574122c88f2b7a",
+        "android_client_info": {
+          "package_name": "taskflow.androidfirebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkrIh4sF1lJ6svdWiWV4JoMr1KxBa16II"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

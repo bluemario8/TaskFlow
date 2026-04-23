@@ -37,6 +37,9 @@ dependencies:
   google_fonts: ^8.0.2
   id_gen: ^0.7.8
   intl: ^0.20.2
+  cloud_firestore: ^6.3.0
+  firebase_core: ^4.7.0
+  date_field: ^6.0.0
 
 dev_dependencies:
   flutter_test:

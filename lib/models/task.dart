@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:id_gen/id_gen_helpers.dart';
 
@@ -16,6 +17,30 @@ class Task {
   bool isCompleted;
 
   Task(this.title, this.category, this.dueDate, this.priority, this.isCompleted);
+
+  // initalize Task with Firebase snapshot
+  factory Task.FromJson(
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    // SnapshotOptions? options,
+  ) {
+    final data = snapshot.data();
+    return Task(
+      data?['title'],
+      data?['category'],
+      (data?['dueDate'] as Timestamp).toDate(),
+      TaskPriority.values.byName(data?['priority']),
+      data?['isCompleted'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    // priority.name returns the value of enum.
+    // e.g. TaskPriority.low.name = "low"
+    return {
+      "id": id, "title": title, "category": category,
+      "dueDate": dueDate, "priority": priority.name, "isCompleted": isCompleted
+    };
+  }
 }
 
 List<Task> dummyTask = [

@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:taskflow/main.dart';
 import 'package:taskflow/pages/task_detail_page.dart';
 import '../widgets/task_card.dart';
 import '../widgets/task_header_card.dart';
@@ -15,6 +17,7 @@ class TaskFlow extends StatefulWidget {
 }
 
 class _TaskFlowState extends State<TaskFlow> {
+  final Stream<QuerySnapshot> _tasksStream = db.collection('tasks').snapshots();
   int _currentIndex = 0;
 
   @override

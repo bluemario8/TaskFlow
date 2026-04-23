@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:date_field/date_field.dart';
+import 'package:taskflow/main.dart';
+import '../models/task.dart';
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({super.key});
@@ -10,7 +14,21 @@ class AddTaskPage extends StatefulWidget {
 class _AddTaskPageState extends State<AddTaskPage> {
   final _formKey = GlobalKey<FormState>();
   String title = '';
-  String priority = 'Low';
+  String category = '';
+  DateTime dueDate = DateTime.now();
+  TaskPriority priority = TaskPriority.low;
+  bool isCompleted = false;
+
+  void _submitForm() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+
+      Task task = Task(title, category, dueDate, priority, isCompleted);
+
+      db.collection("tasks").add(task.toJson()).then((DocumentReference doc) =>
+        print('DocumentSnapshot added with ID: ${doc.id}'));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +58,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               TextFormField(
                 decoration: InputDecoration(labelText: "Category"),
                 onSaved: (value) {
-                  title = value!;
+                  category = value!;
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty){
@@ -50,13 +68,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
                 },
               ),
               SizedBox(height: 16),
-              TextFormField(
+              DateTimeFormField(
                 decoration: InputDecoration(labelText: "Due Date"),
-                onSaved: (value) {
-                  title = value!;
+                onSaved: (DateTime? value) {
+                  dueDate = value!;
                 },
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
+                  if (value == null) {
                     return "Please enter a due date";
                   }
                   return null;
@@ -64,11 +82,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               ),
               SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
-                  }
-                },
+                onPressed: _submitForm,
                 child: Text("Save"),
               ),
             ],
