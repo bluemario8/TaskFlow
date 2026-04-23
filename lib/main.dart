@@ -22,7 +22,7 @@ Future<void> main() async {
 
   await db.collection("tasks").get().then((event) {
     for (var doc in event.docs) {
-      Task task = Task.FromJson(doc);
+      Task task = Task.fromFirebase(doc);
       print("${task.id} ${task.title} ${task.category} " +
           "${task.dueDate.toString()} ${task.priority} ${task.isCompleted}");
       print("${doc.id} => ${doc.data()}");

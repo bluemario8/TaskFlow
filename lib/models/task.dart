@@ -18,19 +18,36 @@ class Task {
 
   Task(this.title, this.category, this.dueDate, this.priority, this.isCompleted);
 
-  // initalize Task with Firebase snapshot
-  factory Task.FromJson(
+  // initialize Task with Firebase snapshot
+  factory Task.fromFirebase(
     DocumentSnapshot<Map<String, dynamic>> snapshot,
     // SnapshotOptions? options,
   ) {
     final data = snapshot.data();
-    return Task(
+    Task task = Task(
       data?['title'],
       data?['category'],
       (data?['dueDate'] as Timestamp).toDate(),
       TaskPriority.values.byName(data?['priority']),
       data?['isCompleted'],
     );
+    task.id = data?['id'];
+    return task;
+  }
+
+  factory Task.fromJson(
+      Map<String, dynamic> snapshot,
+      ) {
+    final data = snapshot;
+    Task task = Task(
+      data['title'],
+      data['category'],
+      (data['dueDate'] as Timestamp).toDate(),
+      TaskPriority.values.byName(data['priority']),
+      data['isCompleted'],
+    );
+    task.id = data['id'];
+    return task;
   }
 
   Map<String, dynamic> toJson() {

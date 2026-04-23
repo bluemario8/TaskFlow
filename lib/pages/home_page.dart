@@ -93,54 +93,67 @@ class _TaskFlowState extends State<TaskFlow> {
           ),
           Flexible(
             child: Center(
-              child: ListView.separated(
-                itemCount: dummyTask.length,
-                itemBuilder: (context, index) {
-                  final task = dummyTask[index];
+              child: StreamBuilder<QuerySnapshot>(
+                stream: _tasksStream,
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Something went wrong');
+                  }
 
-                  return Dismissible(
-                    key: Key(task.title + index.toString()), // must be unique
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text("Loading");
+                  }
 
-                    direction: DismissDirection.endToStart, // swipe right → left
+                  return ListView(
+                    children: snapshot.data!.docs
+                      .map((DocumentSnapshot document) {
+                        Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+                        Task task = Task.fromJson(data);
 
-                    onDismissed: (direction) {
-                      setState(() {
-                        dummyTask.removeAt(index);
-                      });
+                        return Dismissible(
+                          key: Key(task.id.toString()), // must be unique
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("${task.title} deleted")),
-                      );
-                    },
+                          direction: DismissDirection.endToStart, // swipe right → left
 
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TaskDetailPage(task: task, onToggleStatus: (Task p1) {  },),
+                          onDismissed: (direction) {
+                            setState(() {
+                              // dummyTask.removeAt(index);
+                              db.collection('tasks').doc(document.id).delete();
+                              snapshot
+                            });
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text("${task.title} deleted")),
+                            );
+                          },
+
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TaskDetailPage(task: task, onToggleStatus: (Task p1) {  },),
+                                ),
+                              );
+                            },
+                            child: TaskCard(
+                              title: task.title,
+                              date: DateFormat('MMM dd').format(task.dueDate),
+                              priority: task.priority,
+                              isCompleted: task.isCompleted,
+                              onToggleComplete: () {
+                                setState(() {
+                                  task.isCompleted = !task.isCompleted;
+                                });
+                              },
+                            ),
                           ),
                         );
-                      },
-                      child: TaskCard(
-                        title: task.title,
-                        date: DateFormat('MMM dd').format(task.dueDate),
-                        priority: task.priority,
-                        isCompleted: task.isCompleted,
-                        onToggleComplete: () {
-                          setState(() {
-                            task.isCompleted = !task.isCompleted;
-                          });
-                        },
-                      ),
-                    ),
+                        //
+                      }
+                    ).toList(),
                   );
-                },
-                separatorBuilder: (context, index) {
-                  return Divider(
-                    color: Colors.transparent,
-                    height: 4,
-                  );
+
                 },
               ),
             ),
