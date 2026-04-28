@@ -39,6 +39,7 @@ dependencies:
   intl: ^0.20.2
   cloud_firestore: ^6.3.0
   firebase_core: ^4.7.0
+  firebase_auth: any
   date_field: ^6.0.0
 
 dev_dependencies:

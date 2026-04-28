@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
 import 'package:taskflow/main.dart';
@@ -13,20 +14,31 @@ class AddTaskPage extends StatefulWidget {
 
 class _AddTaskPageState extends State<AddTaskPage> {
   final _formKey = GlobalKey<FormState>();
+  final _firestore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
+  final _itemController = TextEditingController();
+
   String title = '';
   String category = '';
   DateTime dueDate = DateTime.now();
   TaskPriority priority = TaskPriority.low;
   bool isCompleted = false;
 
+  // ----- INSERT ----- //
+  // from the lecture and hasn't been tested
+  Future<void> _addItem() async {
+    Task task = Task(title, category, dueDate, priority, isCompleted);
+    await _firestore.collection('tasks').add(
+      task.toJson()
+    );
+  }
+
+
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      Task task = Task(title, category, dueDate, priority, isCompleted);
-
-      db.collection("tasks").add(task.toJson()).then((DocumentReference doc) =>
-        print('DocumentSnapshot added with ID: ${doc.id}'));
+      _addItem();
     }
   }
 
