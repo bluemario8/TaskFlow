@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:taskflow/main.dart';
 import 'package:taskflow/pages/task_detail_page.dart';
 import '../widgets/task_card.dart';
 import '../widgets/task_header_card.dart';
@@ -15,7 +18,21 @@ class TaskFlow extends StatefulWidget {
 }
 
 class _TaskFlowState extends State<TaskFlow> {
+  final Stream<QuerySnapshot> _tasksStream = db.collection('tasks').snapshots();
+  final _firestore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
   int _currentIndex = 0;
+
+  Future<void> _deleteItem(String docId) async {
+    await _firestore.collection('tasks').doc(docId).delete();
+  }
+
+  Future<void> _toggleCompleted(String docId, Task task) async {
+    task.isCompleted = !task.isCompleted;
+    await _firestore.collection('tasks').doc(docId).update(
+        {'isCompleted': task.isCompleted}
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,54 +107,68 @@ class _TaskFlowState extends State<TaskFlow> {
           ),
           Flexible(
             child: Center(
-              child: ListView.separated(
-                itemCount: dummyTask.length,
-                itemBuilder: (context, index) {
-                  final task = dummyTask[index];
+              child: StreamBuilder<QuerySnapshot>(
+                stream: _firestore
+                    .collection('tasks')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Text('Something went wrong');
+                  }
 
-                  return Dismissible(
-                    key: Key(task.title + index.toString()), // must be unique
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Text("Loading");
+                  }
 
-                    direction: DismissDirection.endToStart, // swipe right → left
+                  final docs = snapshot.data!.docs;
+                  return ListView.builder(
+                    itemCount: docs.length,
+                    itemBuilder: (context, index) {
+                      final data = docs[index].data() as Map<String, dynamic>;
+                      final task = Task.fromJson(data);
+                      return Dismissible(
+                        key: Key(task.id.toString()), // must be unique
 
-                    onDismissed: (direction) {
-                      setState(() {
-                        dummyTask.removeAt(index);
-                      });
+                        direction: DismissDirection.endToStart, // swipe right → left
 
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("${task.title} deleted")),
-                      );
-                    },
-
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TaskDetailPage(task: task, onToggleStatus: (Task p1) {  },),
-                          ),
-                        );
-                      },
-                      child: TaskCard(
-                        title: task.title,
-                        date: DateFormat('MMM dd').format(task.dueDate),
-                        priority: task.priority,
-                        isCompleted: task.isCompleted,
-                        onToggleComplete: () {
+                        onDismissed: (direction) {
                           setState(() {
-                            task.isCompleted = !task.isCompleted;
+                            _deleteItem(docs[index].id);
                           });
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("${task.title} deleted")),
+                          );
                         },
-                      ),
-                    ),
+
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TaskDetailPage(task: task, onToggleStatus: (Task p1) {  },),
+                              ),
+                            );
+                          },
+                          child: TaskCard(
+                            title: task.title,
+                            date: DateFormat('MMM dd').format(task.dueDate),
+                            priority: task.priority,
+                            isCompleted: task.isCompleted,
+                            onToggleComplete: () {
+                              setState(() {
+                                _toggleCompleted(docs[index].id, task);
+                                // task.isCompleted = !task.isCompleted;
+                              });
+                            },
+                          ),
+                        ),
+                      );
+                      //
+                    }
+
                   );
-                },
-                separatorBuilder: (context, index) {
-                  return Divider(
-                    color: Colors.transparent,
-                    height: 4,
-                  );
+
                 },
               ),
             ),
