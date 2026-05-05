@@ -25,6 +25,18 @@ class _HomeScreenState extends State<HomeScreen> {
         .doc(user.uid)
         .collection('tasks');
   }
+
+  Color _getPriorityColor(TaskPriority priority) {
+    switch (priority) {
+      case TaskPriority.high:
+        return Colors.red;
+      case TaskPriority.medium:
+        return Colors.orange; // better than pure yellow (more readable)
+      case TaskPriority.low:
+        return Colors.green;
+    }
+  }
+
 // ── DELETE ───────────────────────────────────────────────
   Future<void> _deleteTask(String taskId) async {
     await _tasksRef.doc(taskId).delete();
@@ -34,6 +46,11 @@ class _HomeScreenState extends State<HomeScreen> {
     await _auth.signOut();
   }
 
+  Future<void> _toggleTaskCompletion(Task task) async {
+    await _tasksRef.doc(task.id).update({
+      'isCompleted': !task.isCompleted,
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,17 +103,53 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (context, index) {
                     final task = tasks[index];
 
-                    return ListTile(
-                      leading: Icon(
-                        task.isCompleted ? Icons.check_circle : Icons.circle_outlined,
+                    return Dismissible(
+                      key: Key(task.id!), // REQUIRED (must be unique)
+
+                      direction: DismissDirection.endToStart, // swipe right → left
+
+                      onDismissed: (direction) {
+                        _deleteTask(task.id!);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("${task.title} deleted")),
+                        );
+                      },
+
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        color: Colors.red,
+                        child: const Icon(Icons.delete, color: Colors.white),
                       ),
-                      title: Text(task.title),
-                      subtitle: Text(
-                        "${task.category} • ${task.priority.name}",
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => _deleteTask(task.id!),
+
+                      child: ListTile(
+                        leading: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              onPressed: () => _toggleTaskCompletion(task),
+                              icon: Icon(
+                                task.isCompleted
+                                    ? Icons.check_circle
+                                    : Icons.circle_outlined,
+                                color: task.isCompleted ? Colors.green : Colors.grey,
+                              ),
+                            ),
+                            Container(
+                              width: 8,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: _getPriorityColor(task.priority),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                            ),
+                          ],
+                        ),
+                        title: Text(task.title),
+                        subtitle: Text(
+                          "${task.category} • ${task.priority.name}",
+                        ),
                       ),
                     );
                   },
