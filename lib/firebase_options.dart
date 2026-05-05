@@ -53,11 +53,11 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDkrIh4sF1lJ6svdWiWV4JoMr1KxBa16II',
-    appId: '1:317243693071:android:b6243a15c2dd8e298f2b7a',
-    messagingSenderId: '317243693071',
-    projectId: 'taskflow-6790c',
-    storageBucket: 'taskflow-6790c.firebasestorage.app',
+    apiKey: 'AIzaSyDpKgiUxaQeBACVQLJAN-_hxZHdvwVc7qo',
+    appId: '1:221627298720:android:7315cdbab4e8b904422ac5',
+    messagingSenderId: '221627298720',
+    projectId: 'taskflow-187d3',
+    storageBucket: 'taskflow-187d3.firebasestorage.app',
   );
 
 }
