@@ -118,6 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       child: TaskCard(
                         title: task.title,
+                        category: task.category,
                         date: _formatDate(task.dueDate),
                         priority: task.priority,
                         isCompleted: task.isCompleted,
