@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'create_task_screen.dart';
-import 'login_screen.dart';
+import 'package:taskflow/widgets/task_card.dart';
 import 'package:taskflow/models/task.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,6 +13,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
+  int _currentIndex = 0;
 
   CollectionReference<Map<String, dynamic>> get _tasksRef {
     final user = _auth.currentUser;
@@ -25,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .doc(user.uid)
         .collection('tasks');
   }
+
 // ── DELETE ───────────────────────────────────────────────
   Future<void> _deleteTask(String taskId) async {
     await _tasksRef.doc(taskId).delete();
@@ -33,7 +35,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _logout() async {
     await _auth.signOut();
   }
+// ── HELPERS ──────────────────────────────────────────────
+  Future<void> _toggleTaskCompletion(Task task) async {
+    await _tasksRef.doc(task.id).update({
+      'isCompleted': !task.isCompleted,
+    });
+  }
 
+  String _formatDate(DateTime date) {
+    return "${date.month}/${date.day}/${date.year}";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,23 +97,61 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (context, index) {
                     final task = tasks[index];
 
-                    return ListTile(
-                      leading: Icon(
-                        task.isCompleted ? Icons.check_circle : Icons.circle_outlined,
+                    return Dismissible(
+                      key: Key(task.id!), // REQUIRED (must be unique)
+
+                      direction: DismissDirection.endToStart, // swipe right → left
+
+                      onDismissed: (direction) {
+                        _deleteTask(task.id!);
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("${task.title} deleted")),
+                        );
+                      },
+
+                      background: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        color: Colors.red,
+                        child: const Icon(Icons.delete, color: Colors.white),
                       ),
-                      title: Text(task.title),
-                      subtitle: Text(
-                        "${task.category} • ${task.priority.name}",
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => _deleteTask(task.id!),
+
+                      child: TaskCard(
+                        title: task.title,
+                        category: task.category,
+                        date: _formatDate(task.dueDate),
+                        priority: task.priority,
+                        isCompleted: task.isCompleted,
+                        onToggleComplete: () => _toggleTaskCompletion(task),
                       ),
                     );
                   },
                 );
               },
             )
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.task),
+            label: 'Tasks',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.bookmark),
+            label: 'Categories',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
           ),
         ],
       ),

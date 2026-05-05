@@ -3,6 +3,7 @@ import 'package:taskflow/models/task.dart';
 
 class TaskCard extends StatelessWidget {
   final String title;
+  final String category;
   final String date;
   final TaskPriority priority;
   final bool isCompleted;
@@ -11,6 +12,7 @@ class TaskCard extends StatelessWidget {
   const TaskCard({
     super.key,
     required this.title,
+    required this.category,
     required this.date,
     required this.priority,
     required this.isCompleted,
@@ -71,10 +73,20 @@ class TaskCard extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: Text(
-                title,
-                style: TextStyle(fontSize: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Text(
+                    category,
+                    style: TextStyle(fontSize: 16),
+                  )
+                ],
               ),
+
             ),
             Text(
               date,
